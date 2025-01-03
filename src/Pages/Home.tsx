@@ -1,26 +1,7 @@
-import { useEffect, useState } from "react";
+import { Socket } from "socket.io-client";
 import "../App.css";
-import { io, Socket } from "socket.io-client";
 
-function Home() {
-  const [socket, setSocket] = useState<Socket>();
-
-  // useEffect(() => {
-  //   const newSocket = io('http://localhost:3000')
-  //   setSocket(newSocket);
-  //   newSocket.on('connect', () => {
-  //     console.log('connected')
-  //   })
-
-  //   newSocket.on("matchFound", (data) => {
-  //     console.log("Match Found")
-  //     console.log(data)
-  //   })
-
-  //   return () => {
-  //     newSocket.disconnect();
-  //   };
-  // }, [])
+function Home({socket}:{socket:Socket}) {
 
   function findMatch() {
     console.log("findMatch");
