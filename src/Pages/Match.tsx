@@ -22,9 +22,12 @@ const Match = ({ socket }: { socket: Socket }) => {
       });
 
       socket.on('moveMade', ({row, col, symbol}) => {
-        const newBoard = board.map(row => row.slice());
-        newBoard[row][col] = symbol;
-        setBoard(newBoard);
+        setBoard((prevBoard) => {
+        const newBoard = [...prevBoard];
+        newBoard[row][col] = symbol; 
+        return newBoard; 
+      });
+
       })
     }
   } , [socket , boardId])
