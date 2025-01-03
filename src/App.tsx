@@ -26,7 +26,7 @@ const App = () => {
       <SocketController socket={socket} />
       <Routes>
         <Route path="/" element={<Home socket={socket}/>} />
-        <Route path="/match/:boardId" element={<Match />} />
+        <Route path="/match/:boardId" element={<Match socket={socket} />} />
       </Routes>
     </BrowserRouter>
   )
