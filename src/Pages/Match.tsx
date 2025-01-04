@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { Socket } from 'socket.io-client';
+import { ImCross } from "react-icons/im";
+import { FaRegCircle } from "react-icons/fa";
 
 const Match = ({ socket }: { socket: Socket }) => {
   
@@ -34,12 +36,15 @@ const Match = ({ socket }: { socket: Socket }) => {
 
   return (
     <div>
-      <h1>Match</h1>
+      <h1 className='mb-10 font-extrabold'>Match</h1>
       <div>
         {board.map((row, i) => (
-          <div key={i}>
+          <div key={i}  className='grid grid-cols-3 gap-1'>
             {row.map((cell, j) => (
-              <button disabled={!isAllowedToMove} className={`w-20 h-20 m-1 ${!isAllowedToMove ? "cursor-not-allowed":"" } `} key={j} onClick={()=>{makeMove(i , j)}}>{cell}
+              <button disabled={!isAllowedToMove} className={`w-[100px] h-[100px] flex items-center justify-center m-1 ${!isAllowedToMove ? "cursor-not-allowed":"" } `} key={j} onClick={()=>{makeMove(i , j)}}>
+                {
+                  cell == 'X' ? <ImCross className='h-8 w-auto'/> : cell == 'O' ? <span className='flex h-[100%] w-[100%] relative top-[-1px] items-center justify-center text-5xl font-bold'>O</span> : cell
+                }
               </button>
             ))}
           </div>
