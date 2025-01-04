@@ -2,13 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { Socket } from 'socket.io-client';
 import { ImCross } from "react-icons/im";
-import { FaRegCircle } from "react-icons/fa";
+
+enum result{
+    winner = "winner",
+    looser = "looser",
+    draw = "draw"
+}
 
 const Match = ({ socket }: { socket: Socket }) => {
   
   const params = useParams();
   const [board, setBoard] = useState(Array(3).fill(null).map(() => Array(3).fill(null)));
   const [isAllowedToMove, setIsAllowedToMove] = useState(false);
+  const [result , setResult] = useState<result>();
   const boardId = params.boardId;
 
   function makeMove(row:number , col:number) {
@@ -26,13 +32,29 @@ const Match = ({ socket }: { socket: Socket }) => {
       socket.on('moveMade', ({row, col, symbol}) => {
         setBoard((prevBoard) => {
         const newBoard = [...prevBoard];
-        newBoard[row][col] = symbol; 
+        newBoard[row][col] = symbol;
         return newBoard; 
       });
+      })
 
+      socket.on("gameFinish", ({ result }: { result: string }) => {
+        setResult(result as result);
+        console.log(result)
       })
     }
-  } , [socket , boardId])
+  }, [socket, boardId])
+  
+  if (result === 'winner') {
+    return <h1>Winner</h1>
+  }
+
+  else if (result === 'looser') { 
+    return <h1>Looser</h1>
+  }
+
+  else if (result === 'draw') {
+    return <h1>Draw</h1>
+  }
 
   return (
     <div>
