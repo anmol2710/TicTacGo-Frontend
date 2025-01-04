@@ -44,26 +44,30 @@ const Match = ({ socket }: { socket: Socket }) => {
     }
   }, [socket, boardId])
   
-  if (result === 'winner') {
-    return <h1>Winner</h1>
-  }
+  // if (result === 'winner') {
+  //   return <h1>Winner</h1>
+  // }
 
-  else if (result === 'looser') { 
-    return <h1>Looser</h1>
-  }
+  // else if (result === 'looser') { 
+  //   return <h1>Looser</h1>
+  // }
 
-  else if (result === 'draw') {
-    return <h1>Draw</h1>
-  }
+  // else if (result === 'draw') {
+  //   return <h1>Draw</h1>
+  // }
 
   return (
-    <div>
-      <h1 className='mb-10 font-extrabold'>Match</h1>
+    <div className='flex items-center justify-center flex-col'>
+      <h1 className='mb-10 font-bold'>Match</h1>
+
+      {
+        result == 'winner' ? <h1 className='mb-10 font-medium text-4xl'>Yay! You won the Match🥳🍾</h1> : result === 'looser' ?  <h1 className='mb-10 font-medium text-4xl'>Oops! You lose the match😟</h1> : result === 'draw' ? <h1 className='mb-10 font-medium text-4xl'>Hey! Its a Draw😊</h1> : <></>
+      }
       <div>
         {board.map((row, i) => (
-          <div key={i}  className='grid grid-cols-3 gap-1'>
+          <div key={i}  className='grid grid-cols-3 gap-1 w-[350px]'>
             {row.map((cell, j) => (
-              <button disabled={!isAllowedToMove} className={`w-[100px] h-[100px] flex items-center justify-center m-1 ${!isAllowedToMove ? "cursor-not-allowed":"" } `} key={j} onClick={()=>{makeMove(i , j)}}>
+              <button disabled={!isAllowedToMove || !(result == null)} className={`w-[100px] h-[100px] flex items-center justify-center m-1 ${!isAllowedToMove ? "cursor-not-allowed":"" } `} key={j} onClick={()=>{makeMove(i , j)}}>
                 {
                   cell == 'X' ? <ImCross className='h-8 w-auto'/> : cell == 'O' ? <span className='flex h-[100%] w-[100%] relative top-[-1px] items-center justify-center text-5xl font-bold'>O</span> : cell
                 }
