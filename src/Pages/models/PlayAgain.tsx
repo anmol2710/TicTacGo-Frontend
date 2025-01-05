@@ -15,11 +15,12 @@ const PlayAgain: React.FC<PropType> = ({
   setResult,
   setBoard,
 }) => {
-  const [timer, setTimer] = useState(10);
+  const [timer, setTimer] = useState(20);
   const [wantToPlayAgain, setWantToPlayAgain] = useState(false);
   const [askToPlayAgain, setAskToPlayAgain] = useState(false);
   const navigate = useNavigate();
 
+  // Countdown timer
   useEffect(() => {
     const countdown = setInterval(() => {
       setTimer((prev) => (prev > 0 ? prev - 1 : 0));
@@ -30,10 +31,12 @@ const PlayAgain: React.FC<PropType> = ({
     };
   }, []);
 
+  // Navigate home if timer reaches 0
   useEffect(() => {
-    if (timer == 0) navigate("/");
-  }, [timer]);
+    if (timer === 0) navigate("/");
+  }, [timer, navigate]);
 
+  // Socket event listeners
   useEffect(() => {
     socket.on("playAgain", () => {
       setAskToPlayAgain(false);
@@ -52,7 +55,8 @@ const PlayAgain: React.FC<PropType> = ({
     socket.on("noPlayAgain", () => {
       navigate("/");
     });
-  }, [socket, boardId]);
+  }, [socket, boardId, navigate, setBoard, setResult]);
+
   const playAgain = () => {
     setAskToPlayAgain(true);
     socket.emit("askPlayAgain", boardId);
@@ -74,6 +78,9 @@ const PlayAgain: React.FC<PropType> = ({
           <h1 className="mb-6 font-medium text-2xl text-center text-gray-300">
             Do you want to play again?
           </h1>
+          <div className="text-center mb-4 text-white">
+            Time Remaining: {timer}s
+          </div>
           <div className="flex gap-4 justify-center">
             <button
               className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
@@ -107,6 +114,7 @@ const PlayAgain: React.FC<PropType> = ({
           Asking opponent to play again
         </h1>
         <button
+          className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition"
           onClick={() => {
             socket.emit("yesPlayAgain", boardId);
             setAskToPlayAgain(false);
@@ -136,4 +144,4 @@ const PlayAgain: React.FC<PropType> = ({
   );
 };
 
-export default PlayAgain; 
+export default PlayAgain;
