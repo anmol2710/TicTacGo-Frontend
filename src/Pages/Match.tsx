@@ -130,12 +130,69 @@ const Match = ({ socket }: { socket: Socket }) => {
     setResult(undefined);
   };
 
+  if (wantToPlayAgain) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50">
+        <div className="bg-gray-900 rounded-lg shadow-lg p-8 w-full max-w-md">
+          <h1 className="mb-4 font-bold text-xl text-center text-white">Match</h1>
+          <h1 className="mb-6 font-medium text-2xl text-center text-gray-300">Do you want to play again?</h1>
+          <div className="text-center mb-4 text-white">Time Remaining: {timer}s</div>
+          <div className="flex gap-4 justify-center">
+            <button
+              className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+              onClick={() => {
+                socket.emit("yesPlayAgain", boardId);
+                setAskToPlayAgain(false);
+                setWantToPlayAgain(false);
+              }}
+            >
+              Yes
+            </button>
+            <button
+              className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+              onClick={() => {
+                socket.emit("noPlayAgain", boardId);
+                setAskToPlayAgain(false);
+                setWantToPlayAgain(false);
+              }}
+            >
+              No
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  } else if (askToPlayAgain) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50">
+        <div className="bg-gray-900 rounded-lg shadow-lg p-8 w-full max-w-md">
+          <h1 className="mb-4 font-bold text-xl text-center text-white">Match</h1>
+          <h1 className="mb-6 font-medium text-2xl text-center text-gray-300">Asking opponent to play again</h1>
+          <div className="text-center mb-4 text-white">Time Remaining: {timer}s</div>
+          <div className="flex gap-4 justify-center">
+            <button
+              className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+              onClick={() => {
+                socket.emit("noPlayAgain", boardId);
+                setAskToPlayAgain(false);
+                setWantToPlayAgain(false);
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className='flex items-center justify-center flex-col'>
       <h1 className='mb-10 font-bold'>Match</h1>
+
       {result === 'winner' && <h1 className='mb-10 font-medium text-4xl'>Yay! You won the Match🥳🍾</h1>}
       {result === 'looser' && <h1 className='mb-10 font-medium text-4xl'>Oops! You lose the match😟</h1>}
-      {result === 'draw' && <h1 className='mb-10 font-medium text-4xl'>Hey! It's a Draw😊</h1>}
+      {result === 'draw' && <h1 className='mb-10 font-medium text-4xl'>Hey! It’s a Draw😊</h1>}
 
       {result === undefined && isAllowedToMove && (
         <div className='mb-4 text-lg font-semibold text-red-500'>Your Turn: {timer}s</div>
